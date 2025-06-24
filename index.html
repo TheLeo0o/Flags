@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz de Países</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/reset.css">
+</head>
+
+<body>
+    <main class="container">
+
+        <!-- Tela: Menu -->
+        <section id="tela-menu" class="tela ativa">
+            <h1 class="header">Quiz de Países</h1>
+            <button class="btn" onclick="mostrarTela('quiz')">Iniciar Jogo</button>
+        </section>
+
+        <!-- Tela: Quiz -->
+        <section id="tela-quiz" class="tela quiz">
+            <div class="header">
+                Paises que falam em espanhol
+                <div id="contador" style="font-size: 20px; margin-top: 5px;"></div>
+            </div>
+            <div class="flags-grid">
+                <ul>
+                    <li>
+                        <button class="flag" onclick="verificarResposta(true)">
+                            <img src="src/png/009-panama.png" alt="Panamá">
+                        </button>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <button class="flag" onclick="verificarResposta(true)">
+                            <img src="src/png/001-chile.png" alt="Chile">
+                        </button>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <button class="flag" onclick="verificarResposta(false)">
+                            <img src="src/png/002-ireland.png" alt="Irlanda">
+                        </button>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <button class="flag" onclick="verificarResposta(false)">
+                            <img src="src/png/003-greece.png" alt="Grécia">
+                        </button>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <button class="flag" onclick="verificarResposta(false)">
+                            <img src="src/png/022-portugal.png" alt="Portugal">
+                        </button>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <button class="flag" onclick="verificarResposta(true)">
+                            <img src="src/png/034-uruguay.png" alt="Uruguay">
+                        </button>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <button class="flag" onclick="verificarResposta(false)">
+                            <img src="src/png/015-czech republic.png" alt="Tchéquia">
+                        </button>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <button class="flag" onclick="verificarResposta(true)">
+                            <img src="src/png/011-iran.png" alt="Cuba">
+                        </button>
+                    </li>
+                </ul>
+                <ul>
+                    <li>
+                        <button class="flag" onclick="verificarResposta(false)">
+                            <img src="src/png/008-croatia.png" alt="Croácia">
+                        </button>
+                    </li>
+                </ul>
+            </div>
+            <div class="score">
+                Acertos: <span id="acertos">0</span> / 3
+            </div>
+            <button id="toggle-sound" class="sound-btn">🔊</button>
+        </section>
+
+        <!-- Tela: Resultado -->
+        <section id="tela-resultado" class="tela resultado">
+            <h2 id="mensagem-resultado" class="header">Resultado</h2>
+            <button class="btn" onclick="mostrarTela('menu')">Voltar ao Menu</button>
+        </section>
+
+        <!-- Tela: Tempo Esgotado -->
+        <section id="tela-tempo" class="tela tempo">
+            <h2 class="header">⏰ Tempo Esgotado!</h2>
+            <button class="btn" onclick="mostrarTela('menu')">Voltar ao Menu</button>
+        </section>
+    </main>
+
+    <script>
+        let tempoRestante = 30;
+        let intervalo;
+        let totalAcertos = 0; // contador global de acertos
+
+        function mostrarTela(nome) {
+            document.querySelectorAll(".tela").forEach((tela) =>
+                tela.classList.remove("ativa")
+            );
+            document.getElementById(`tela-${nome}`).classList.add("ativa");
+
+            if (nome === "quiz") {
+                iniciarContador();
+            } else {
+                pararContador();
+            }
+        }
+
+        function iniciarContador() {
+            tempoRestante = 30;
+            document.getElementById("contador").textContent = `${tempoRestante}s`;
+            intervalo = setInterval(() => {
+                tempoRestante--;
+                document.getElementById("contador").textContent = `${tempoRestante}s`;
+                if (tempoRestante <= 0) {
+                    clearInterval(intervalo);
+                    mostrarTela("tempo");
+                }
+            }, 1000);
+        }
+
+        function pararContador() {
+            clearInterval(intervalo);
+        }
+
+        function verificarResposta(correta) {
+            pararContador();
+            if (correta) {
+                totalAcertos++;
+                document.getElementById("acertos").textContent = totalAcertos;
+            }
+            const msg = document.getElementById("mensagem-resultado");
+            msg.textContent = correta ? "Você acertou! 🎉" : "Você errou! 😢";
+            mostrarTela("resultado");
+        }
+    </script>
+</body>
+
+</html>
